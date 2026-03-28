@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 
+const BASE_URL = 'https://balancehub-server.onrender.com';
+
 const Dashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -19,14 +21,14 @@ const Dashboard = () => {
   const config = { headers: { 'x-auth-token': user.token } };
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/categories', config)
+    axios.get(`${BASE_URL}/api/categories`, config)
       .then(res => setCategories(res.data))
       .catch(() => {});
   }, []);
 
   useEffect(() => {
     if (selectedCategory) {
-      axios.get(`http://localhost:5000/api/questions?category=${selectedCategory._id}&search=${search}`, config)
+      axios.get(`${BASE_URL}/api/questions?category=${selectedCategory._id}&search=${search}`, config)
         .then(res => setQuestions(res.data))
         .catch(() => {});
     }
@@ -34,7 +36,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (selectedQuestion) {
-      axios.get(`http://localhost:5000/api/answers/${selectedQuestion._id}`, config)
+      axios.get(`${BASE_URL}/api/answers/${selectedQuestion._id}`, config)
         .then(res => setAnswers(res.data))
         .catch(() => {});
     }
@@ -48,7 +50,7 @@ const Dashboard = () => {
   const handleAskQuestion = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/questions', {
+      const res = await axios.post(`${BASE_URL}/api/questions`, {
         title: newQuestion.title,
         body: newQuestion.body,
         category: selectedCategory._id
@@ -62,7 +64,7 @@ const Dashboard = () => {
   const handlePostAnswer = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/answers', {
+      const res = await axios.post(`${BASE_URL}/api/answers`, {
         body: newAnswer,
         question: selectedQuestion._id
       }, config);
@@ -74,7 +76,7 @@ const Dashboard = () => {
   return (
     <div className="dashboard">
       <div className="dashboard-header">
-        <h1>BalanceHub</h1>
+        <h1>⚖️ BalanceHub</h1>
         <div className="header-right">
           <span>Welcome, {user.username}</span>
           <button onClick={handleLogout} className="logout-btn">Logout</button>
@@ -151,7 +153,7 @@ const Dashboard = () => {
 
           {selectedQuestion && (
             <div>
-              <button onClick={() => setSelectedQuestion(null)} className="back-btn">Back to Questions</button>
+              <button onClick={() => setSelectedQuestion(null)} className="back-btn">← Back to Questions</button>
               <div className="question-detail">
                 <h2>{selectedQuestion.title}</h2>
                 <p>{selectedQuestion.body}</p>
