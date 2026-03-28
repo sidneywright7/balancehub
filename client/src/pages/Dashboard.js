@@ -20,12 +20,14 @@ const Dashboard = () => {
 
   const config = { headers: { 'x-auth-token': user.token } };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     axios.get(`${BASE_URL}/api/categories`, config)
       .then(res => setCategories(res.data))
       .catch(() => {});
   }, []);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (selectedCategory) {
       axios.get(`${BASE_URL}/api/questions?category=${selectedCategory._id}&search=${search}`, config)
@@ -34,6 +36,7 @@ const Dashboard = () => {
     }
   }, [selectedCategory, search]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (selectedQuestion) {
       axios.get(`${BASE_URL}/api/answers/${selectedQuestion._id}`, config)
